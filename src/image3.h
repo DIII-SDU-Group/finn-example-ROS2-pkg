@@ -1,4 +1,4 @@
-uint8_t test_image[196608]   = {
+uint8_t test_image3[196608]   = {
 0 , 
 0 , 
 0 , 
