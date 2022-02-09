@@ -127,7 +127,7 @@ void FinnInterfacerNode::imageRecvCallback(const sensor_msgs::msg::Image::Shared
     cv_bridge::CvImagePtr cv_ptr = cv_bridge::toCvCopy(msg, msg->encoding);
 
     cv::Mat img = cv_ptr->image;
-    cv::cvtColor(img, img, CV_BGR2RGB);
+    //cv::cvtColor(img, img, CV_BGR2RGB);
     cv::resize(img, img, cv::Size(IMAGE_X, IMAGE_Y), cv::INTER_LINEAR);
 
     std::ostringstream stringStream;
