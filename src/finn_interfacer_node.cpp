@@ -162,7 +162,7 @@ int FinnInterfacerNode::streamImageToFinn(const cv::Mat img)
 
     std::vector<uint8_t> img_vec_in;
 
-    img_vec_in.assign(img.data, img.data + img.total());
+    img_vec_in.assign(img.data, img.data + img.total()*CHANNELS);
 
     int success = callStreamToFinnIP(&img_vec_in[0]);
 
