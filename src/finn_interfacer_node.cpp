@@ -13,7 +13,9 @@ FinnInterfacerNode::FinnInterfacerNode(const std::string & node_name, const std:
 {
     initIPs();
 	    
-    RCLCPP_INFO(this->get_logger(), "Successfully initialized IPs, waiting for fetch_finn to finish");
+    RCLCPP_INFO(this->get_logger(), "Successfully initialized IPs");
+
+    RCLCPP_INFO(this->get_logger(), "Flushing fetch_finn FIFO");
 
     //while(!XFetch_finn_IsIdle(&fetch_finn));
     if(XFetch_finn_IsIdle(&fetch_finn)){
@@ -21,9 +23,11 @@ FinnInterfacerNode::FinnInterfacerNode(const std::string & node_name, const std:
         XFetch_finn_Start(&fetch_finn);
 
     }
+
+    RCLCPP_INFO(this->get_logger(), "fetch_finn ready");
+
      
     std::chrono::nanoseconds sleepperiod(20000000);
-    //sleepperiod = 20000000;
     rclcpp::GenericRate<std::chrono::high_resolution_clock> rate(sleepperiod);
 
     while(XFetch_finn_IsIdle(&fetch_finn)){
@@ -116,13 +120,19 @@ void FinnInterfacerNode::initIPs()
 
 void FinnInterfacerNode::imageRecvCallback(const sensor_msgs::msg::Image::SharedPtr msg)
 {
+    static int its_recv = 0;
+
     RCLCPP_INFO(this->get_logger(), "Image received");
 
     cv_bridge::CvImagePtr cv_ptr = cv_bridge::toCvCopy(msg, msg->encoding);
 
     cv::Mat img;
-    cv::cvtColor(cv_ptr->image, img, CV_BGR2RGB);
+    //cv::cvtColor(cv_ptr->image, img, CV_BGR2RGB);
     cv::resize(img, img, cv::Size(IMAGE_X, IMAGE_Y), cv::INTER_LINEAR);
+
+    sdt::string filename = std::format("/home/mp4d/images_testing/recv/{}.png", std::to_string(its_recv++));
+    
+    cv::imwrite(filename, img);
 
     img_q.push(img);
 
@@ -225,6 +235,7 @@ int FinnInterfacerNode::callFetchFinnIP(uint8_t result[4]){
 
 void FinnInterfacerNode::timer_callback()
 {
+    static int its = 0;
     uint8_t result[4];
     int success = callFetchFinnIP(result);
 
@@ -251,10 +262,14 @@ void FinnInterfacerNode::timer_callback()
         sensor_msgs::msg::Image::SharedPtr msg_out = img_out.toImageMsg();
         bbox_img_publisher_->publish(*msg_out);
 
+        sdt::string filename = std::format("/home/mp4d/images_testing/bbox/{}.png", std::to_string(its++));
+        
+        cv::imwrite(filename, bbox_img);
+
         RCLCPP_INFO(this->get_logger(), "Published bbox image");
     } else
     {
-        RCLCPP_ERROR(this->get_logger(), "Got Finn result, but no image is in queue");
+        RCLCPP_FATAL(this->get_logger(), "Got Finn result, but no image is in queue");
     }
     
     vision_msgs::msg::BoundingBox2D msg;
@@ -262,8 +277,8 @@ void FinnInterfacerNode::timer_callback()
     msg.center.x = (result[3] + result[1])/2;
     msg.center.y = (result[2] + result[0])/2;
     msg.center.theta = 0;
-    msg.size_x = result[3] - result[1];
-    msg.size_y = result[2] - result[0];
+    msg.size_x = result[1] - result[3];
+    msg.size_y = result[0] - result[2];
 
     bbox_publisher_->publish(msg);
     
