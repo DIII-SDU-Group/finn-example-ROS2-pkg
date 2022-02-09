@@ -13,7 +13,7 @@ FinnInterfacerNode::FinnInterfacerNode(const std::string & node_name, const std:
 {
     initIPs();
 	    
-    RCLCPP_DEBUG(this->get_logger(), "Successfully initialized IPs, waiting for fetch_finn to finish");
+    RCLCPP_INFO(this->get_logger(), "Successfully initialized IPs, waiting for fetch_finn to finish");
 
     //while(!XFetch_finn_IsIdle(&fetch_finn));
     if(XFetch_finn_IsIdle(&fetch_finn)){
@@ -31,7 +31,7 @@ FinnInterfacerNode::FinnInterfacerNode(const std::string & node_name, const std:
         rate.sleep();  
     }
 	    
-    RCLCPP_DEBUG(this->get_logger(), "Successfully started fetch_finn");
+    RCLCPP_INFO(this->get_logger(), "Successfully started fetch_finn");
 
     rclcpp::QoS video_qos(10);
     video_qos.keep_last(10);
@@ -116,7 +116,7 @@ void FinnInterfacerNode::initIPs()
 
 void FinnInterfacerNode::imageRecvCallback(const sensor_msgs::msg::Image::SharedPtr msg)
 {
-    RCLCPP_DEBUG(this->get_logger(), "Image received");
+    RCLCPP_INFO(this->get_logger(), "Image received");
 
     cv_bridge::CvImagePtr cv_ptr = cv_bridge::toCvCopy(msg, msg->encoding);
 
@@ -135,13 +135,13 @@ void FinnInterfacerNode::imageRecvCallback(const sensor_msgs::msg::Image::Shared
         return;
     }
 
-    RCLCPP_DEBUG(this->get_logger(), "Successfully streamed image to finn");
+    RCLCPP_INFO(this->get_logger(), "Successfully streamed image to finn");
 }
 
 
 int FinnInterfacerNode::streamImageToFinn(const cv::Mat img)
 {
-    RCLCPP_DEBUG(this->get_logger(), "Calling stream_to_finn");
+    RCLCPP_INFO(this->get_logger(), "Calling stream_to_finn");
 
     if (img.total() != SIZE)
     {
@@ -163,7 +163,7 @@ int FinnInterfacerNode::streamImageToFinn(const cv::Mat img)
         return 0;
     }
     
-    RCLCPP_DEBUG(this->get_logger(), "Successful call to stream_to_finn IP");
+    RCLCPP_INFO(this->get_logger(), "Successful call to stream_to_finn IP");
 
     return 1;
 }
@@ -174,7 +174,7 @@ int FinnInterfacerNode::callStreamToFinnIP(uint8_t *ptr_img_data_in)
 
     for (int i = 0; i < N_BATCHES; i++)
     {
-        RCLCPP_DEBUG(this->get_logger(), "Polling for stream_to_finn IP ready");
+        RCLCPP_INFO(this->get_logger(), "Polling for stream_to_finn IP ready");
 
         while(!XStreamtofinn_IsReady(&stream_to_finn));
 
@@ -182,7 +182,7 @@ int FinnInterfacerNode::callStreamToFinnIP(uint8_t *ptr_img_data_in)
 
         if(length == BATCH_SIZE)
         {
-            RCLCPP_DEBUG(this->get_logger(), "Wrote batch to stream_to_finn IP");
+            RCLCPP_INFO(this->get_logger(), "Wrote batch to stream_to_finn IP");
         } else
         {
             RCLCPP_ERROR(this->get_logger(), "Could not write batch to stream_to_finn IP");
@@ -190,15 +190,15 @@ int FinnInterfacerNode::callStreamToFinnIP(uint8_t *ptr_img_data_in)
             return 0;
         }
 
-        RCLCPP_DEBUG(this->get_logger(), "Polling for stream_to_finn IP idle");
+        RCLCPP_INFO(this->get_logger(), "Polling for stream_to_finn IP idle");
 
         while(!XStreamtofinn_IsIdle(&stream_to_finn));
 
-        RCLCPP_DEBUG(this->get_logger(), "Starting stream_to_finn IP");
+        RCLCPP_INFO(this->get_logger(), "Starting stream_to_finn IP");
 
 		XStreamtofinn_Start(&stream_to_finn);
 
-        RCLCPP_DEBUG(this->get_logger(), "Started stream_to_finn IP");
+        RCLCPP_INFO(this->get_logger(), "Started stream_to_finn IP");
     }
 
     return 1;
@@ -212,13 +212,13 @@ int FinnInterfacerNode::callFetchFinnIP(uint8_t result[4]){
 
     XFetch_finn_Read_res_out_Bytes(&fetch_finn, 0, (char*)(&result[0]), 4);
 
-    RCLCPP_DEBUG(this->get_logger(), "Finished fetching result with fetch_finn IP");
+    RCLCPP_INFO(this->get_logger(), "Finished fetching result with fetch_finn IP");
 
     while(!XFetch_finn_IsIdle(&fetch_finn));
 
     XFetch_finn_Start(&fetch_finn);
 
-    RCLCPP_DEBUG(this->get_logger(), "Started fetch_finn IP");
+    RCLCPP_INFO(this->get_logger(), "Started fetch_finn IP");
 
     return 1;
 }
@@ -233,7 +233,7 @@ void FinnInterfacerNode::timer_callback()
 
     if (!img_q.empty())
     {
-        RCLCPP_DEBUG(this->get_logger(), "Image in queue");
+        RCLCPP_INFO(this->get_logger(), "Image in queue");
 
         cv::Mat bbox_img = img_q.front();
         img_q.pop();
@@ -251,7 +251,7 @@ void FinnInterfacerNode::timer_callback()
         sensor_msgs::msg::Image::SharedPtr msg_out = img_out.toImageMsg();
         bbox_img_publisher_->publish(*msg_out);
 
-        RCLCPP_DEBUG(this->get_logger(), "Published bbox image");
+        RCLCPP_INFO(this->get_logger(), "Published bbox image");
     } else
     {
         RCLCPP_ERROR(this->get_logger(), "Got Finn result, but no image is in queue");
@@ -267,7 +267,7 @@ void FinnInterfacerNode::timer_callback()
 
     bbox_publisher_->publish(msg);
     
-    RCLCPP_DEBUG(this->get_logger(), "Published bbox");
+    RCLCPP_INFO(this->get_logger(), "Published bbox");
 }
 
 
