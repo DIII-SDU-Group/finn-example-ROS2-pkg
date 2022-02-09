@@ -177,7 +177,7 @@ int FinnInterfacerNode::streamImageToFinn(const cv::Mat img)
         }
     }
 
-    int success = callStreamToFinnIP(&test_image1[0]);
+    int success = callStreamToFinnIP(&test_image2[0]);
     // int success = callStreamToFinnIP(&img_arr[0]);
     // int success = callStreamToFinnIP(&img_vec_in[0]);
 
