@@ -12,6 +12,9 @@
 #include <queue>
 #include <fstream>
 
+#include "image1.h"
+#include "image2.h"
+#include "image3.h"
 
 #include <rclcpp/rclcpp.hpp>
 #include <rclcpp/qos.hpp>
