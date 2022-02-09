@@ -235,12 +235,20 @@ int FinnInterfacerNode::callFetchFinnIP(uint8_t result[4]){
 
 void FinnInterfacerNode::timer_callback()
 {
+    RCLCPP_INFO(this->get_logger(), "Timer callback");
+
     static int its = 0;
     uint8_t result[4];
+    RCLCPP_INFO(this->get_logger(), "Calling fetch_finn");
     int success = callFetchFinnIP(result);
 
     if (!success)
+    {
+        RCLCPP_INFO(this->get_logger(), "Fetch finn not done yet");
         return;
+    }
+
+    RCLCPP_INFO(this->get_logger(), "Fetch finn done");
 
     if (!img_q.empty())
     {
