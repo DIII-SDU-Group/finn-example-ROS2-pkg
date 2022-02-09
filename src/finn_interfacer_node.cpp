@@ -22,8 +22,9 @@ FinnInterfacerNode::FinnInterfacerNode(const std::string & node_name, const std:
 
     }
      
-    std::chrono::nanoseconds sleepperiod = 20000000;
-    rclcpp::rate::GenericRate rate(sleepperiod);
+    std::chrono::nanoseconds sleepperiod(20000000);
+    //sleepperiod = 20000000;
+    rclcpp::GenericRate<std::chrono::high_resolution_clock> rate(sleepperiod);
 
     while(XFetch_finn_IsIdle(&fetch_finn)){
         XFetch_finn_Start(&fetch_finn);
