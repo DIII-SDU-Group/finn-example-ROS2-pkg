@@ -52,7 +52,7 @@ using namespace std::chrono_literals;
 class FinnInterfacerNode : public rclcpp::Node
 {
 public:
-    FinnInterfacerNode(const std::string & node_name="finn_interfacer", const std::string & node_namespace="/");
+    FinnInterfacerNode(const std::string & node_name="finn_interfacer", const std::string & node_namespace="");
     ~FinnInterfacerNode();
 
 private:
