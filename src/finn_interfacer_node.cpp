@@ -122,7 +122,7 @@ void FinnInterfacerNode::imageRecvCallback(const sensor_msgs::msg::Image::Shared
 
     cv::Mat img;
     cv::cvtColor(cv_ptr->image, img, CV_BGR2RGB);
-    //cv::resize(img, img, cv::Size(IMAGE_X, IMAGE_Y), cv::INTER_LINEAR);
+    cv::resize(img, img, cv::Size(IMAGE_X, IMAGE_Y), cv::INTER_LINEAR);
 
     img_q.push(img);
 
@@ -143,7 +143,7 @@ int FinnInterfacerNode::streamImageToFinn(const cv::Mat img)
 {
     RCLCPP_INFO(this->get_logger(), "Calling stream_to_finn");
 
-    if (img.total() != SIZE)
+    if (img.total() != SIZE/CHANNELS)
     {
         RCLCPP_ERROR(this->get_logger(), "Expected image of size %d, got size %d, aborting", SIZE, img.total());
 
