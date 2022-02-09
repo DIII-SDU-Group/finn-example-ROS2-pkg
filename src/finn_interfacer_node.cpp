@@ -122,7 +122,7 @@ void FinnInterfacerNode::imageRecvCallback(const sensor_msgs::msg::Image::Shared
 
     cv::Mat img;
     cv::cvtColor(cv_ptr->image, img, CV_BGR2RGB);
-    cv::resize(img, img, cv::Size(IMAGE_X, IMAGE_Y), cv::INTER_LINEAR);
+    //cv::resize(img, img, cv::Size(IMAGE_X, IMAGE_Y), cv::INTER_LINEAR);
 
     img_q.push(img);
 
