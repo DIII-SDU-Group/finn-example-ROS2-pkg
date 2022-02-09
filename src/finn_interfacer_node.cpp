@@ -127,7 +127,7 @@ void FinnInterfacerNode::imageRecvCallback(const sensor_msgs::msg::Image::Shared
     cv_bridge::CvImagePtr cv_ptr = cv_bridge::toCvCopy(msg, msg->encoding);
 
     cv::Mat img = cv_ptr->image;
-    //cv::cvtColor(cv_ptr->image, img, CV_BGR2RGB);
+    cv::cvtColor(img, img, CV_BGR2RGB);
     cv::resize(img, img, cv::Size(IMAGE_X, IMAGE_Y), cv::INTER_LINEAR);
 
     std::ostringstream stringStream;
@@ -160,11 +160,25 @@ int FinnInterfacerNode::streamImageToFinn(const cv::Mat img)
         return 0;
     }
 
-    std::vector<uint8_t> img_vec_in;
+    // std::vector<uint8_t> img_vec_in;
 
-    img_vec_in.assign(img.data, img.data + img.total()*CHANNELS);
+    // img_vec_in.assign(img.data, img.data + img.total()*CHANNELS);
 
-    int success = callStreamToFinnIP(&img_vec_in[0]);
+    uint8_t img_arr[SIZE];
+    int cnt = 0;
+    for (int i = 0; i < IMAGE_X; i++)
+    {
+        for (int j = IMAGE_Y-1; j > -1; j--)
+        {
+            for (int k = CHANNELS-1; k > -1; k--)
+            {
+                img_arr[cnt++] = img.at<uint8_t>(i,j,k);
+            }
+        }
+    }
+
+    int success = callStreamToFinnIP(&img_arr[0]);
+    // int success = callStreamToFinnIP(&img_vec_in[0]);
 
     if (!success)
     {
