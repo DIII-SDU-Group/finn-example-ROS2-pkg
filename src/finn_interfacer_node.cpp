@@ -130,9 +130,9 @@ void FinnInterfacerNode::imageRecvCallback(const sensor_msgs::msg::Image::Shared
     //cv::cvtColor(cv_ptr->image, img, CV_BGR2RGB);
     cv::resize(img, img, cv::Size(IMAGE_X, IMAGE_Y), cv::INTER_LINEAR);
 
-    sdt::string filename = std::format("/home/mp4d/images_testing/recv/{}.png", std::to_string(its_recv++));
-    
-    cv::imwrite(filename, img);
+    std::ostringstream stringStream;
+    stringStream << "/home/mp4d/images_testing/recv/" << std::to_string(its_recv++) << ".png";
+    cv::imwrite(stringStream.str(), img);
 
     img_q.push(img);
 
@@ -262,16 +262,23 @@ void FinnInterfacerNode::timer_callback()
         sensor_msgs::msg::Image::SharedPtr msg_out = img_out.toImageMsg();
         bbox_img_publisher_->publish(*msg_out);
 
-        sdt::string filename = std::format("/home/mp4d/images_testing/bbox/{}.png", std::to_string(its++));
-        
-        cv::imwrite(filename, bbox_img);
+        std::ostringstream stringStream;
+        stringStream << "/home/mp4d/images_testing/bbox/" << std::to_string(its) << ".png";
+        cv::imwrite(stringStream.str(), bbox_img);
 
         RCLCPP_INFO(this->get_logger(), "Published bbox image");
     } else
     {
         RCLCPP_FATAL(this->get_logger(), "Got Finn result, but no image is in queue");
     }
-    
+
+    std::ostringstream stringStream;
+    stringStream << "/home/mp4d/images_testing/bbox/" << std::to_string(its++) << ".txt";
+    std::ofstream bbox_file;
+    bbox_file.open(stringStream.str());
+    bbox_file << std::to_string(result[0]) << "\t" << std::to_string(result[1]) << "\t" << std::to_string(result[2]) << "\t" << std::to_string(result[3]);
+    bbox_file.close();
+
     vision_msgs::msg::BoundingBox2D msg;
 
     msg.center.x = (result[3] + result[1])/2;
