@@ -15,9 +15,20 @@ FinnInterfacerNode::FinnInterfacerNode(const std::string & node_name, const std:
 	    
     RCLCPP_DEBUG(this->get_logger(), "Successfully initialized IPs, waiting for fetch_finn to finish");
 
-    while(!XFetch_finn_IsIdle(&fetch_finn));
+    //while(!XFetch_finn_IsIdle(&fetch_finn));
+    if(XFetch_finn_IsIdle(&fetch_finn)){
 
-    XFetch_finn_Start(&fetch_finn);
+        XFetch_finn_Start(&fetch_finn);
+
+    }
+     
+    std::chrono::nanoseconds sleepperiod = 20000000;
+    rclcpp::rate::GenericRate rate(sleepperiod);
+
+    while(XFetch_finn_IsIdle(&fetch_finn)){
+        XFetch_finn_Start(&fetch_finn);
+        rate.sleep();  
+    }
 	    
     RCLCPP_DEBUG(this->get_logger(), "Successfully started fetch_finn");
 

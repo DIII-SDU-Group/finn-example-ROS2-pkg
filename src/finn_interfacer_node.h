@@ -19,6 +19,7 @@
 #include "vision_msgs/msg/bounding_box2_d.hpp"
 #include <image_transport/image_transport.hpp>
 #include <cv_bridge/cv_bridge.h>
+#include <rclcpp/rate.hpp>
 
 #include <opencv2/opencv.hpp>
 #include <opencv2/core.hpp>
