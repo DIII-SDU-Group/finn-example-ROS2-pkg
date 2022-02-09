@@ -12,10 +12,14 @@ FinnInterfacerNode::FinnInterfacerNode(const std::string & node_name, const std:
     : Node(node_name, node_namespace)
 {
     initIPs();
+	    
+    RCLCPP_DEBUG(this->get_logger(), "Successfully initialized IPs, waiting for fetch_finn to finish");
 
     while(!XFetch_finn_IsIdle(&fetch_finn));
 
     XFetch_finn_Start(&fetch_finn);
+	    
+    RCLCPP_DEBUG(this->get_logger(), "Successfully started fetch_finn");
 
     rclcpp::QoS video_qos(10);
     video_qos.keep_last(10);
