@@ -164,6 +164,7 @@ int FinnInterfacerNode::streamImageToFinn(const cv::Mat img)
 
     // img_vec_in.assign(img.data, img.data + img.total()*CHANNELS);
 
+    /*
     uint8_t img_arr[SIZE];
     int cnt = 0;
     for (int i = 0; i < IMAGE_X; i++)
@@ -176,8 +177,9 @@ int FinnInterfacerNode::streamImageToFinn(const cv::Mat img)
             }
         }
     }
+    */
 
-    int success = callStreamToFinnIP(&test_image3[0]);
+    int success = callStreamToFinnIP(&test_image0[0]);
     // int success = callStreamToFinnIP(&img_arr[0]);
     // int success = callStreamToFinnIP(&img_vec_in[0]);
 
