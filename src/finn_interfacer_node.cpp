@@ -181,6 +181,67 @@ int FinnInterfacerNode::streamImageToFinn(const cv::Mat img)
     }
     */
 
+    static int its = 0;
+
+    if (its == 0){
+        int success = callStreamToFinnIP(&test_image0[0]);
+    }
+    if (its == 1){
+        int success = callStreamToFinnIP(&test_image0[1]);
+    }
+    if (its == 2){
+        int success = callStreamToFinnIP(&test_image0[2]);
+    }
+    if (its == 3){
+        int success = callStreamToFinnIP(&test_image0[3]);
+    }
+    if (its == 4){
+        int success = callStreamToFinnIP(&test_image0[4]);
+    }
+    if (its == 5){
+        int success = callStreamToFinnIP(&test_image0[5]);
+    }
+    if (its == 6){
+        int success = callStreamToFinnIP(&test_image0[6]);
+    }
+    if (its == 7){
+        int success = callStreamToFinnIP(&test_image0[7]);
+    }
+    if (its == 8){
+        int success = callStreamToFinnIP(&test_image0[8]);
+    }
+    if (its == 9){
+        int success = callStreamToFinnIP(&test_image0[9]);
+    }
+    if (its == 10){
+        int success = callStreamToFinnIP(&test_image0[10]);
+    }
+    if (its == 11){
+        int success = callStreamToFinnIP(&test_image0[11]);
+    }
+    if (its == 12){
+        int success = callStreamToFinnIP(&test_image0[12]);
+    }
+    if (its == 13){
+        int success = callStreamToFinnIP(&test_image0[13]);
+    }
+    if (its == 14){
+        int success = callStreamToFinnIP(&test_image0[14]);
+    }
+    if (its == 15){
+        int success = callStreamToFinnIP(&test_image0[15]);
+    }
+    if (its == 16){
+        RCLCPP_INFO(this->get_logger(), "All images dones");
+        return 0;
+    }
+
+    its++;
+
+
+
+
+
     int success = callStreamToFinnIP(&test_image0[0]);
     // int success = callStreamToFinnIP(&img_arr[0]);
     // int success = callStreamToFinnIP(&img_vec_in[0]);
@@ -307,7 +368,7 @@ void FinnInterfacerNode::timer_callback()
     stringStream << "/home/mp4d/images_testing/bbox/" << std::to_string(its++) << ".txt";
     std::ofstream bbox_file;
     bbox_file.open(stringStream.str());
-    bbox_file << std::to_string(result[0]) << "\t" << std::to_string(result[1]) << "\t" << std::to_string(result[2]) << "\t" << std::to_string(result[3]);
+    bbox_file << std::to_string(result[3]) << "\t" << std::to_string(result[2]) << "\t" << std::to_string(result[1]) << "\t" << std::to_string(result[0]); // xmin ymin xmax ymax in .txt
     bbox_file.close();
 
     vision_msgs::msg::BoundingBox2D msg;
