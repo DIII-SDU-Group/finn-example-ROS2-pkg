@@ -20,8 +20,10 @@ FinnInterfacerNode::FinnInterfacerNode(const std::string & node_name, const std:
     //while(!XFetch_finn_IsIdle(&fetch_finn));
     if(XFetch_finn_IsIdle(&fetch_finn)){
 
+        RCLCPP_INFO(this->get_logger(), "Starting fetch_finn");
         XFetch_finn_Start(&fetch_finn);
-
+        RCLCPP_INFO(this->get_logger(), "Started fetch_finn");
+        
     }
 
     RCLCPP_INFO(this->get_logger(), "fetch_finn ready");
@@ -258,6 +260,9 @@ void FinnInterfacerNode::timer_callback()
     uint8_t result[4];
     RCLCPP_INFO(this->get_logger(), "Calling fetch_finn");
     int success = callFetchFinnIP(result);
+
+    result[3] = 255-result[3];
+    result[1] = 255-result[1];
 
     if (!success)
     {
