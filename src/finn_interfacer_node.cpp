@@ -261,9 +261,6 @@ void FinnInterfacerNode::timer_callback()
     RCLCPP_INFO(this->get_logger(), "Calling fetch_finn");
     int success = callFetchFinnIP(result);
 
-    result[3] = 255-result[1];
-    result[1] = 255-result[3];
-
     if (!success)
     {
         RCLCPP_INFO(this->get_logger(), "Fetch finn not done yet");
