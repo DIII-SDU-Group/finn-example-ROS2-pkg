@@ -187,49 +187,49 @@ int FinnInterfacerNode::streamImageToFinn(const cv::Mat img)
         int success = callStreamToFinnIP(&test_image0[0]);
     }
     if (its == 1){
-        int success = callStreamToFinnIP(&test_image0[1]);
+        int success = callStreamToFinnIP(&test_image1[0]);
     }
     if (its == 2){
-        int success = callStreamToFinnIP(&test_image0[2]);
+        int success = callStreamToFinnIP(&test_image2[0]);
     }
     if (its == 3){
-        int success = callStreamToFinnIP(&test_image0[3]);
+        int success = callStreamToFinnIP(&test_image3[0]);
     }
     if (its == 4){
-        int success = callStreamToFinnIP(&test_image0[4]);
+        int success = callStreamToFinnIP(&test_image4[0]);
     }
     if (its == 5){
-        int success = callStreamToFinnIP(&test_image0[5]);
+        int success = callStreamToFinnIP(&test_image5[0]);
     }
     if (its == 6){
-        int success = callStreamToFinnIP(&test_image0[6]);
+        int success = callStreamToFinnIP(&test_image6[0]);
     }
     if (its == 7){
-        int success = callStreamToFinnIP(&test_image0[7]);
+        int success = callStreamToFinnIP(&test_image7[0]);
     }
     if (its == 8){
-        int success = callStreamToFinnIP(&test_image0[8]);
+        int success = callStreamToFinnIP(&test_image8[0]);
     }
     if (its == 9){
-        int success = callStreamToFinnIP(&test_image0[9]);
+        int success = callStreamToFinnIP(&test_image9[0]);
     }
     if (its == 10){
-        int success = callStreamToFinnIP(&test_image0[10]);
+        int success = callStreamToFinnIP(&test_image10[0]);
     }
     if (its == 11){
-        int success = callStreamToFinnIP(&test_image0[11]);
+        int success = callStreamToFinnIP(&test_image11[0]);
     }
     if (its == 12){
-        int success = callStreamToFinnIP(&test_image0[12]);
+        int success = callStreamToFinnIP(&test_image12[0]);
     }
     if (its == 13){
-        int success = callStreamToFinnIP(&test_image0[13]);
+        int success = callStreamToFinnIP(&test_image13[0]);
     }
     if (its == 14){
-        int success = callStreamToFinnIP(&test_image0[14]);
+        int success = callStreamToFinnIP(&test_image14[0]);
     }
     if (its == 15){
-        int success = callStreamToFinnIP(&test_image0[15]);
+        int success = callStreamToFinnIP(&test_image15[0]);
     }
     if (its == 16){
         RCLCPP_INFO(this->get_logger(), "All images dones");
