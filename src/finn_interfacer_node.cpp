@@ -162,89 +162,89 @@ int FinnInterfacerNode::streamImageToFinn(const cv::Mat img)
         return 0;
     }
 
-    // std::vector<uint8_t> img_vec_in;
+    std::vector<uint8_t> img_vec_in;
 
-    // img_vec_in.assign(img.data, img.data + img.total()*CHANNELS);
+    img_vec_in.assign(img.data, img.data + img.total()*CHANNELS);
 
-    /*
-    uint8_t img_arr[SIZE];
-    int cnt = 0;
-    for (int i = 0; i < IMAGE_X; i++)
-    {
-        for (int j = IMAGE_Y-1; j > -1; j--)
-        {
-            for (int k = CHANNELS-1; k > -1; k--)
-            {
-                img_arr[cnt++] = img.at<uint8_t>(i,j,k);
-            }
-        }
-    }
-    */
+    
+    // uint8_t img_arr[SIZE];
+    // int cnt = 0;
+    // for (int i = 0; i < IMAGE_X; i++)
+    // {
+    //     for (int j = IMAGE_Y-1; j > -1; j--)
+    //     {
+    //         for (int k = CHANNELS-1; k > -1; k--)
+    //         {
+    //             img_arr[cnt++] = img.at<uint8_t>(i,j,k);
+    //         }
+    //     }
+    // }
+    
 
-    static int its = 0;
+    // static int its = 0;
 
-    if (its == 0){
-        int success = callStreamToFinnIP(&test_image0[0]);
-    }
-    if (its == 1){
-        int success = callStreamToFinnIP(&test_image1[0]);
-    }
-    if (its == 2){
-        int success = callStreamToFinnIP(&test_image2[0]);
-    }
-    if (its == 3){
-        int success = callStreamToFinnIP(&test_image3[0]);
-    }
-    if (its == 4){
-        int success = callStreamToFinnIP(&test_image4[0]);
-    }
-    if (its == 5){
-        int success = callStreamToFinnIP(&test_image5[0]);
-    }
-    if (its == 6){
-        int success = callStreamToFinnIP(&test_image6[0]);
-    }
-    if (its == 7){
-        int success = callStreamToFinnIP(&test_image7[0]);
-    }
-    if (its == 8){
-        int success = callStreamToFinnIP(&test_image8[0]);
-    }
-    if (its == 9){
-        int success = callStreamToFinnIP(&test_image9[0]);
-    }
-    if (its == 10){
-        int success = callStreamToFinnIP(&test_image10[0]);
-    }
-    if (its == 11){
-        int success = callStreamToFinnIP(&test_image11[0]);
-    }
-    if (its == 12){
-        int success = callStreamToFinnIP(&test_image12[0]);
-    }
-    if (its == 13){
-        int success = callStreamToFinnIP(&test_image13[0]);
-    }
-    if (its == 14){
-        int success = callStreamToFinnIP(&test_image14[0]);
-    }
-    if (its == 15){
-        int success = callStreamToFinnIP(&test_image15[0]);
-    }
-    if (its == 16){
-        RCLCPP_INFO(this->get_logger(), "All images dones");
-        return 0;
-    }
+    // if (its == 0){
+    //     int success = callStreamToFinnIP(&test_image0[0]);
+    // }
+    // if (its == 1){
+    //     int success = callStreamToFinnIP(&test_image1[0]);
+    // }
+    // if (its == 2){
+    //     int success = callStreamToFinnIP(&test_image2[0]);
+    // }
+    // if (its == 3){
+    //     int success = callStreamToFinnIP(&test_image3[0]);
+    // }
+    // if (its == 4){
+    //     int success = callStreamToFinnIP(&test_image4[0]);
+    // }
+    // if (its == 5){
+    //     int success = callStreamToFinnIP(&test_image5[0]);
+    // }
+    // if (its == 6){
+    //     int success = callStreamToFinnIP(&test_image6[0]);
+    // }
+    // if (its == 7){
+    //     int success = callStreamToFinnIP(&test_image7[0]);
+    // }
+    // if (its == 8){
+    //     int success = callStreamToFinnIP(&test_image8[0]);
+    // }
+    // if (its == 9){
+    //     int success = callStreamToFinnIP(&test_image9[0]);
+    // }
+    // if (its == 10){
+    //     int success = callStreamToFinnIP(&test_image10[0]);
+    // }
+    // if (its == 11){
+    //     int success = callStreamToFinnIP(&test_image11[0]);
+    // }
+    // if (its == 12){
+    //     int success = callStreamToFinnIP(&test_image12[0]);
+    // }
+    // if (its == 13){
+    //     int success = callStreamToFinnIP(&test_image13[0]);
+    // }
+    // if (its == 14){
+    //     int success = callStreamToFinnIP(&test_image14[0]);
+    // }
+    // if (its == 15){
+    //     int success = callStreamToFinnIP(&test_image15[0]);
+    // }
+    // if (its == 16){
+    //     RCLCPP_INFO(this->get_logger(), "All images dones");
+    //     return 0;
+    // }
 
-    its++;
-
-
+    // its++;
 
 
 
-    int success = callStreamToFinnIP(&test_image0[0]);
+
+
+    // int success = callStreamToFinnIP(&test_image0[0]);
     // int success = callStreamToFinnIP(&img_arr[0]);
-    // int success = callStreamToFinnIP(&img_vec_in[0]);
+    int success = callStreamToFinnIP(&img_vec_in[0]);
 
     if (!success)
     {
