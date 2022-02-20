@@ -139,8 +139,6 @@ void FinnInterfacerNode::imageRecvCallback(const sensor_msgs::msg::Image::Shared
     int y_low = y_mid - (256/2);
 
     // Crop image
-    cv::Rect roi(x_low, y_low, 256, 256);
-    img = img(roi);
 
     // cv::cvtColor(img, img, CV_BGR2RGB);
 
@@ -368,9 +366,9 @@ void FinnInterfacerNode::timer_callback()
         sensor_msgs::msg::Image::SharedPtr msg_out = img_out.toImageMsg();
         bbox_img_publisher_->publish(*msg_out);
 
-        std::ostringstream stringStream;
-        stringStream << "/home/mp4d/images_testing/bbox/" << std::to_string(its) << ".png";
-        cv::imwrite(stringStream.str(), bbox_img);
+        // std::ostringstream stringStream;
+        // stringStream << "/home/mp4d/images_testing/bbox/" << std::to_string(its) << ".png";
+        // cv::imwrite(stringStream.str(), bbox_img);
 
         RCLCPP_DEBUG(this->get_logger(), "Published bbox image");
     } else
