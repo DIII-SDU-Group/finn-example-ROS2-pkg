@@ -54,5 +54,17 @@ install(TARGETS
     DESTINATION lib/${PROJECT_NAME}
 )
 
+# install the launch directory
+install(DIRECTORY
+  launch
+  DESTINATION share/${PROJECT_NAME}/
+)
+
+# install the config directory
+install(DIRECTORY
+  config
+  DESTINATION share/${PROJECT_NAME}/
+)
+
 
 ament_package()
