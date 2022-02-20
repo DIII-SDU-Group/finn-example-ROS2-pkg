@@ -122,13 +122,10 @@ void FinnInterfacerNode::initIPs()
 
 void FinnInterfacerNode::imageRecvCallback(const sensor_msgs::msg::Image::SharedPtr msg)
 {
-    start_time = std::chrono::system_clock::now();
-    start_time_q.push(start_time);
-
-
     
     if (!start_time_set)
     {
+        start_time = std::chrono::system_clock::now();
         timing = true;
         // start_time = std::chrono::system_clock::now();
         start_time_set = true;
@@ -443,13 +440,6 @@ void FinnInterfacerNode::timer_callback()
 
         timing = false;
     }
-
-    std::chrono::time_point<std::chrono::system_clock> starting_time = start_time_q.front();
-    start_time_q.pop();
-    int total_dur = std::chrono::duration_cast<std::chrono::nanoseconds>(publish_done_ts - starting_time).count();
-    RCLCPP_INFO(this->get_logger(), "Total time: %d ns", total_dur);
-
-
 }
 
 

@@ -59,6 +59,8 @@
 #include <chrono>
 #include <iostream>
 
+#define ROS_DEFAULT_API
+
 #define NAN_ std::numeric_limits<double>::quiet_NaN()
 
 using namespace std::chrono;
@@ -71,8 +73,7 @@ public:
 #ifdef ROS_DEFAULT_API
 		offboard_control_mode_publisher_ =
 			this->create_publisher<OffboardControlMode>("fmu/offboard_control_mode/in", 10);
-		trajectory_setpoint_publisher_ =
-			this->create_publisher<TrajectorySetpoint>("fmu/trajectory_setpoint/in", 10);
+
 		vehicle_command_publisher_ =
 			this->create_publisher<VehicleCommand>("fmu/vehicle_command/in", 10);
 #else
