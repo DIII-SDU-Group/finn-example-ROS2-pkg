@@ -379,13 +379,13 @@ void FinnInterfacerNode::timer_callback()
 
         cv::Rect rect(result[3], result[2], result[1]-result[3], result[0]-result[2]);
 
+        cv::cvtColor(bbox_img, bbox_img, CV_BGR2RGB);
+
         cv::rectangle(bbox_img, rect, cv::Scalar(0, 0, 255));
 
         cv::circle(bbox_img, cv::Point(result[3]+((result[1]-result[3])/2), result[2]+((result[0]-result[2])/2)),5, cv::Scalar(0,0,255),-1, 8,0);
 
         cv::line(bbox_img, cv::Point(256/2,0), cv::Point(256/2,255), cv::Scalar(0,0,255));
-
-        cv::cvtColor(bbox_img, bbox_img, CV_BGR2RGB);
 
         static cv::VideoWriter video("/home/mp4d/test_video.avi", cv::VideoWriter::fourcc('M','J','P','G'), 23, cv::Size(256,256));
         video.write(bbox_img);
