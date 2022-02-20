@@ -122,11 +122,15 @@ void FinnInterfacerNode::initIPs()
 
 void FinnInterfacerNode::imageRecvCallback(const sensor_msgs::msg::Image::SharedPtr msg)
 {
+    start_time = std::chrono::system_clock::now();
+    start_time_q.push(start_time);
+
+
     
     if (!start_time_set)
     {
         timing = true;
-        start_time = std::chrono::system_clock::now();
+        // start_time = std::chrono::system_clock::now();
         start_time_set = true;
     }
 
@@ -419,10 +423,10 @@ void FinnInterfacerNode::timer_callback()
     bbox_publisher_->publish(msg);
     
     RCLCPP_DEBUG(this->get_logger(), "Published bbox");
+    std::chrono::time_point<std::chrono::system_clock> publish_done_ts = std::chrono::system_clock::now();
 
     if (timing)
     {
-        std::chrono::time_point<std::chrono::system_clock> publish_done_ts = std::chrono::system_clock::now();
 
         int resize_dur = std::chrono::duration_cast<std::chrono::nanoseconds>(resize_ts - start_time).count();
         int stf_dur = std::chrono::duration_cast<std::chrono::nanoseconds>(stf_ts - resize_ts).count();
@@ -439,6 +443,13 @@ void FinnInterfacerNode::timer_callback()
 
         timing = false;
     }
+
+    std::chrono::time_point<std::chrono::system_clock> starting_time = start_time_q.front();
+    start_time_q.pop();
+    int total_dur = std::chrono::duration_cast<std::chrono::nanoseconds>(publish_done_ts - starting_time).count();
+    RCLCPP_INFO(this->get_logger(), "Total time: %d ns", total_dur);
+
+
 }
 
 

@@ -89,6 +89,7 @@ private:
     uint8_t result[4];
 
     std::queue<cv::Mat> img_q;
+    std::queue<std::chrono::time_point<std::chrono::system_clk> start_time_q;
 };
 
 // /*****************************************************************************/
