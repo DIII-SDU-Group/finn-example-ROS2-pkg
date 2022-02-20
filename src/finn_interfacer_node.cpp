@@ -139,8 +139,8 @@ void FinnInterfacerNode::imageRecvCallback(const sensor_msgs::msg::Image::Shared
     int y_low = y_mid - (256/2);
 
     // Crop image
-    // cv::Rect roi(x_low, y_low, 256, 256);
-    // img = img(roi);
+    cv::Rect roi(x_low, y_low, 256, 256);
+    img = img(roi);
 
     // cv::cvtColor(img, img, CV_BGR2RGB);
 
