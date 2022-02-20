@@ -25,6 +25,7 @@ find_package(std_msgs REQUIRED)
 find_package(OpenCV REQUIRED)
 find_package(vision_msgs REQUIRED)
 find_package(cv_bridge REQUIRED)
+find_package(px4_msgs REQUIRED)
 
 include_directories(include/finn-example-ip/ip/finn_fetcher/drivers/fetch_finn_v1_0/src)
 link_directories (include/finn-example-ip/ip/finn_fetcher/drivers/fetch_finn_v1_0/src) 
@@ -40,6 +41,10 @@ add_executable(finn_interfacer
     include/finn-example-ip/ip/finn_fetcher/drivers/fetch_finn_v1_0/src/xfetch_finn.c
 )
 
+add_executable(bbox_armer 
+    src/bbox_arm_node.cpp
+    )
+
 ament_target_dependencies(finn_interfacer 
     rclcpp 
     sensor_msgs
@@ -49,8 +54,23 @@ ament_target_dependencies(finn_interfacer
     cv_bridge
 )
 
+ament_target_dependencies(bbox_armer 
+    rclcpp 
+    sensor_msgs
+    std_msgs
+    vision_msgs
+    OpenCV
+    cv_bridge
+    px4_msgs
+)
+
 install(TARGETS
     finn_interfacer
+    DESTINATION lib/${PROJECT_NAME}
+)
+
+install(TARGETS
+    bbox_armer
     DESTINATION lib/${PROJECT_NAME}
 )
 

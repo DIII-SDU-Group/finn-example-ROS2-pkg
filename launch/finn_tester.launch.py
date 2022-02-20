@@ -28,7 +28,16 @@ def generate_launch_description():
         parameters=[config]
     )
 
+
+    bbox_armer_node = Node(
+        package="finn-example",
+        executable="bbox_armer",
+        name="bbox_armer",
+        remappings=[("/bbox", "/finn_interfacer/bbox")]
+    )
+
     return LaunchDescription([
         finn_interfacer,
-        camera_node
+        camera_node,
+        bbox_armer_node
     ])
