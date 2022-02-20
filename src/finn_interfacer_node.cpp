@@ -391,7 +391,7 @@ void FinnInterfacerNode::timer_callback()
 
         // std::ostringstream stringStream;
         // stringStream << "/home/mp4d/images_testing/bbox/" << std::to_string(its) << ".png";
-        // cv::imwrite(stringStream.str(), bbox_img);
+        // cv::imwrite  (stringStream.str(), bbox_img);
 
         RCLCPP_DEBUG(this->get_logger(), "Published bbox image");
     } else
@@ -424,11 +424,11 @@ void FinnInterfacerNode::timer_callback()
     {
         std::chrono::time_point<std::chrono::system_clock> publish_done_ts = std::chrono::system_clock::now();
 
-        int resize_dur = std::chrono::duration_cast<std::chrono::milliseconds>(resize_ts - start_time).count();
-        int stf_dur = std::chrono::duration_cast<std::chrono::milliseconds>(stf_ts - resize_ts).count();
-        int finn_dur = std::chrono::duration_cast<std::chrono::milliseconds>(finn_done_ts - stf_ts).count();
-        int publish_dur = std::chrono::duration_cast<std::chrono::milliseconds>(publish_done_ts - finn_done_ts).count();
-        int total_dur = std::chrono::duration_cast<std::chrono::milliseconds>(publish_done_ts - start_time).count();
+        int resize_dur = std::chrono::duration_cast<std::chrono::nanoseconds>(resize_ts - start_time).count();
+        int stf_dur = std::chrono::duration_cast<std::chrono::nanoseconds>(stf_ts - resize_ts).count();
+        int finn_dur = std::chrono::duration_cast<std::chrono::nanoseconds>(finn_done_ts - stf_ts).count();
+        int publish_dur = std::chrono::duration_cast<std::chrono::nanoseconds>(publish_done_ts - finn_done_ts).count();
+        int total_dur = std::chrono::duration_cast<std::chrono::nanoseconds>(publish_done_ts - start_time).count();
 
     
         RCLCPP_INFO(this->get_logger(), "Resize time: %d ns", resize_dur);
