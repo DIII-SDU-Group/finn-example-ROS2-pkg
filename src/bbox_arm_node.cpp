@@ -107,49 +107,49 @@ public:
 				});
 
 
-		auto timer_callback = [this]() -> void {
+		// auto timer_callback = [this]() -> void {
 
-			if (offboard_setpoint_counter_ == 1) { // 5s sleep before starting offboard
-				RCLCPP_INFO(this->get_logger(), "Waiting 5 seconds before starting offboard mode");
-				std::chrono::nanoseconds sleepperiod(5000000000); 
-				rclcpp::GenericRate<std::chrono::high_resolution_clock> rate(sleepperiod);
-				rate.sleep();  
-			}
+		// 	if (offboard_setpoint_counter_ == 1) { // 5s sleep before starting offboard
+		// 		RCLCPP_INFO(this->get_logger(), "Waiting 5 seconds before starting offboard mode");
+		// 		std::chrono::nanoseconds sleepperiod(5000000000); 
+		// 		rclcpp::GenericRate<std::chrono::high_resolution_clock> rate(sleepperiod);
+		// 		rate.sleep();  
+		// 	}
 
-			if (offboard_setpoint_counter_ == 10) {
-				// Change to Offboard mode after 10 setpoints
-				RCLCPP_INFO(this->get_logger(), "Entering offboard control mode");
-				this->publish_vehicle_command(VehicleCommand::VEHICLE_CMD_DO_SET_MODE, 1, 6);
-				this->arm();
-				RCLCPP_INFO(this->get_logger(), "Takeoff and hover");
-			}
+		// 	if (offboard_setpoint_counter_ == 10) {
+		// 		// Change to Offboard mode after 10 setpoints
+		// 		RCLCPP_INFO(this->get_logger(), "Entering offboard control mode");
+		// 		this->publish_vehicle_command(VehicleCommand::VEHICLE_CMD_DO_SET_MODE, 1, 6);
+		// 		this->arm();
+		// 		RCLCPP_INFO(this->get_logger(), "Takeoff and hover");
+		// 	}
 
-			// offboard_control_mode needs to be paired with trajectory_setpoint
-			if (offboard_setpoint_counter_ < hover_count_) {
-				publish_offboard_control_mode();
-				publish_hover_setpoint();
-			// stop the counter and land after after reaching certain value
-			} 
-			else if  (offboard_setpoint_counter_ < tracking_count_) {	
-				if (offboard_setpoint_counter_ == hover_count_)
-				{	
-					RCLCPP_INFO(this->get_logger(), "Follow tracking setpoints");
-				}
+		// 	// offboard_control_mode needs to be paired with trajectory_setpoint
+		// 	if (offboard_setpoint_counter_ < hover_count_) {
+		// 		publish_offboard_control_mode();
+		// 		publish_hover_setpoint();
+		// 	// stop the counter and land after after reaching certain value
+		// 	} 
+		// 	else if  (offboard_setpoint_counter_ < tracking_count_) {	
+		// 		if (offboard_setpoint_counter_ == hover_count_)
+		// 		{	
+		// 			RCLCPP_INFO(this->get_logger(), "Follow tracking setpoints");
+		// 		}
 						
-				publish_offboard_control_mode();
-				publish_tracking_setpoint();
-				//RCLCPP_INFO(this->get_logger(), "vx: %f yawspeed: %f", vx_, yawspeed_);
-			} 
-			else if (offboard_setpoint_counter_ == landing_count_) {
-				this->publish_vehicle_command(VehicleCommand::VEHICLE_CMD_NAV_LAND);
-				RCLCPP_INFO(this->get_logger(), "Landing at current position");
-			}
+		// 		publish_offboard_control_mode();
+		// 		publish_tracking_setpoint();
+		// 		//RCLCPP_INFO(this->get_logger(), "vx: %f yawspeed: %f", vx_, yawspeed_);
+		// 	} 
+		// 	else if (offboard_setpoint_counter_ == landing_count_) {
+		// 		this->publish_vehicle_command(VehicleCommand::VEHICLE_CMD_NAV_LAND);
+		// 		RCLCPP_INFO(this->get_logger(), "Landing at current position");
+		// 	}
 
-			offboard_setpoint_counter_++;
-		};
+		// 	offboard_setpoint_counter_++;
+		// };
 
 
-		timer_ = this->create_wall_timer(50ms, timer_callback);
+		// timer_ = this->create_wall_timer(50ms, timer_callback);
 		
 	}
 
