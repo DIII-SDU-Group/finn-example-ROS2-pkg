@@ -130,16 +130,20 @@ void FinnInterfacerNode::imageRecvCallback(const sensor_msgs::msg::Image::Shared
 
     cv::Mat img = cv_ptr->image;
 
-    int width = img.size().width;
-    int x_mid = width/2;
-    int x_low = x_mid - (256/2);
-    int x_high = x_mid + (256/2);
+    // int width = img.size().width;
+    // int x_mid = width/2;
+    // int x_low = x_mid - (256/2);
+    // int x_high = x_mid + (256/2);
 
-    int height = img.size().height;
-    int y_mid = height/2;
-    int y_low = y_mid - (256/2);
-    int y_high = y_mid + (256/2);
+    // int height = img.size().height;
+    // int y_mid = height/2;
+    // int y_low = y_mid - (256/2);
+    // int y_high = y_mid + (256/2);
     // Crop image
+    int x_low = 48;
+    int x_high = 304;
+    int y_low = 16;
+    int y_high = 272;
     img = img(cv::Range(x_low,x_high), cv::Range(y_low,y_high));
 
     cv::cvtColor(img, img, CV_BGR2RGB);
