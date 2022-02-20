@@ -385,7 +385,7 @@ void FinnInterfacerNode::timer_callback()
 
         cv::line(bbox_img, cv::Point(256/2,0), cv::Point(256/2,255), cv::Scalar(0,0,255));
 
-        static cv::VideoWriter video("/home/mp4d/test_video.mp4", cv::VideoWriter::fourcc('M','J','P','G'), 25, cv::Size(256,256));
+        static cv::VideoWriter video("/home/mp4d/test_video.avi", cv::VideoWriter::fourcc('M','J','P','G'), 25, cv::Size(256,256));
         video.write(bbox_img);
 
         cv_bridge::CvImage img_out;
