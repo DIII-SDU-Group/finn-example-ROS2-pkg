@@ -139,12 +139,12 @@ void FinnInterfacerNode::imageRecvCallback(const sensor_msgs::msg::Image::Shared
     int y_low = y_mid - (256/2);
 
     // Crop image
-    cv::Rect roi(x_low, y_low, 256, 256);
-    img = img(roi);
+    // cv::Rect roi(x_low, y_low, 256, 256);
+    // img = img(roi);
 
     // cv::cvtColor(img, img, CV_BGR2RGB);
 
-    // cv::resize(img, img, cv::Size(IMAGE_X, IMAGE_Y), cv::INTER_LINEAR);
+    cv::resize(img, img, cv::Size(IMAGE_X, IMAGE_Y), cv::INTER_LINEAR);
 
     //std::ostringstream stringStream;
     //stringStream << "/home/mp4d/images_testing/recv/" << std::to_string(its_recv++) << ".png";
