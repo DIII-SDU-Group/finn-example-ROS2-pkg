@@ -124,17 +124,31 @@ void FinnInterfacerNode::imageRecvCallback(const sensor_msgs::msg::Image::Shared
 {
     static int its_recv = 0;
 
-    RCLCPP_INFO(this->get_logger(), "Image received");
+    RCLCPP_DEBUG(this->get_logger(), "Image received");
 
     cv_bridge::CvImagePtr cv_ptr = cv_bridge::toCvCopy(msg, msg->encoding);
 
     cv::Mat img = cv_ptr->image;
-    //cv::cvtColor(img, img, CV_BGR2RGB);
-    cv::resize(img, img, cv::Size(IMAGE_X, IMAGE_Y), cv::INTER_LINEAR);
 
-    std::ostringstream stringStream;
-    stringStream << "/home/mp4d/images_testing/recv/" << std::to_string(its_recv++) << ".png";
-    cv::imwrite(stringStream.str(), img);
+    int width = img.size().width;
+    int x_mid = width/2;
+    int x_low = x_mid - (256/2);
+    int x_high = x_mid + (256/2);
+
+    int height = img.size().height;
+    int y_mid = height/2;
+    int y_low = y_mid - (256/2);
+    int y_high = y_mid + (256/2);
+    // Crop image
+    img = img(cv::Range(x_low,x_high), cv::Range(y_low,y_high));
+
+    cv::cvtColor(img, img, CV_BGR2RGB);
+
+    // cv::resize(img, img, cv::Size(IMAGE_X, IMAGE_Y), cv::INTER_LINEAR);
+
+    //std::ostringstream stringStream;
+    //stringStream << "/home/mp4d/images_testing/recv/" << std::to_string(its_recv++) << ".png";
+    //cv::imwrite(stringStream.str(), img);
 
     img_q.push(img);
 
@@ -147,13 +161,13 @@ void FinnInterfacerNode::imageRecvCallback(const sensor_msgs::msg::Image::Shared
         return;
     }
 
-    RCLCPP_INFO(this->get_logger(), "Successfully streamed image to finn");
+    RCLCPP_DEBUG(this->get_logger(), "Successfully streamed image to finn");
 }
 
 
 int FinnInterfacerNode::streamImageToFinn(const cv::Mat img)
 {
-    RCLCPP_INFO(this->get_logger(), "Calling stream_to_finn");
+    RCLCPP_DEBUG(this->get_logger(), "Calling stream_to_finn");
 
     if (img.total() != SIZE/CHANNELS)
     {
@@ -232,7 +246,7 @@ int FinnInterfacerNode::streamImageToFinn(const cv::Mat img)
     //     int success = callStreamToFinnIP(&test_image15[0]);
     // }
     // if (its == 16){
-    //     RCLCPP_INFO(this->get_logger(), "All images dones");
+    //     RCLCPP_DEBUG(this->get_logger(), "All images dones");
     //     return 0;
     // }
 
@@ -253,7 +267,7 @@ int FinnInterfacerNode::streamImageToFinn(const cv::Mat img)
         return 0;
     }
     
-    RCLCPP_INFO(this->get_logger(), "Successful call to stream_to_finn IP");
+    RCLCPP_DEBUG(this->get_logger(), "Successful call to stream_to_finn IP");
 
     return 1;
 }
@@ -264,7 +278,7 @@ int FinnInterfacerNode::callStreamToFinnIP(uint8_t *ptr_img_data_in)
 
     for (int i = 0; i < N_BATCHES; i++)
     {
-        RCLCPP_INFO(this->get_logger(), "Polling for stream_to_finn IP ready");
+        RCLCPP_DEBUG(this->get_logger(), "Polling for stream_to_finn IP ready");
 
         while(!XStreamtofinn_IsReady(&stream_to_finn));
 
@@ -272,7 +286,7 @@ int FinnInterfacerNode::callStreamToFinnIP(uint8_t *ptr_img_data_in)
 
         if(length == BATCH_SIZE)
         {
-            RCLCPP_INFO(this->get_logger(), "Wrote batch to stream_to_finn IP");
+            RCLCPP_DEBUG(this->get_logger(), "Wrote batch to stream_to_finn IP");
         } else
         {
             RCLCPP_ERROR(this->get_logger(), "Could not write batch to stream_to_finn IP");
@@ -280,15 +294,15 @@ int FinnInterfacerNode::callStreamToFinnIP(uint8_t *ptr_img_data_in)
             return 0;
         }
 
-        RCLCPP_INFO(this->get_logger(), "Polling for stream_to_finn IP idle");
+        RCLCPP_DEBUG(this->get_logger(), "Polling for stream_to_finn IP idle");
 
         while(!XStreamtofinn_IsIdle(&stream_to_finn));
 
-        RCLCPP_INFO(this->get_logger(), "Starting stream_to_finn IP");
+        RCLCPP_DEBUG(this->get_logger(), "Starting stream_to_finn IP");
 
 		XStreamtofinn_Start(&stream_to_finn);
 
-        RCLCPP_INFO(this->get_logger(), "Started stream_to_finn IP");
+        RCLCPP_DEBUG(this->get_logger(), "Started stream_to_finn IP");
     }
 
     return 1;
@@ -302,24 +316,24 @@ int FinnInterfacerNode::callFetchFinnIP(uint8_t result[4]){
 
     XFetch_finn_Read_res_out_Bytes(&fetch_finn, 0, (char*)(&result[0]), 4);
 
-    RCLCPP_INFO(this->get_logger(), "Finished fetching result with fetch_finn IP");
+    RCLCPP_DEBUG(this->get_logger(), "Finished fetching result with fetch_finn IP");
 
     while(!XFetch_finn_IsIdle(&fetch_finn));
 
     XFetch_finn_Start(&fetch_finn);
 
-    RCLCPP_INFO(this->get_logger(), "Started fetch_finn IP");
+    RCLCPP_DEBUG(this->get_logger(), "Started fetch_finn IP");
 
     return 1;
 }
 
 void FinnInterfacerNode::timer_callback()
 {
-    RCLCPP_INFO(this->get_logger(), "Timer callback");
+    RCLCPP_DEBUG(this->get_logger(), "Timer callback");
 
     static int its = 0;
     uint8_t result[4];
-    RCLCPP_INFO(this->get_logger(), "Calling fetch_finn");
+    RCLCPP_DEBUG(this->get_logger(), "Calling fetch_finn");
     int success = callFetchFinnIP(result);
 
     // uint8_t tmp_val = result[3];
@@ -328,15 +342,15 @@ void FinnInterfacerNode::timer_callback()
 
     if (!success)
     {
-        RCLCPP_INFO(this->get_logger(), "Fetch finn not done yet");
+        RCLCPP_DEBUG(this->get_logger(), "Fetch finn not done yet");
         return;
     }
 
-    RCLCPP_INFO(this->get_logger(), "Fetch finn done");
+    RCLCPP_DEBUG(this->get_logger(), "Fetch finn done");
 
     if (!img_q.empty())
     {
-        RCLCPP_INFO(this->get_logger(), "Image in queue");
+        RCLCPP_DEBUG(this->get_logger(), "Image in queue");
 
         cv::Mat bbox_img = img_q.front();
         img_q.pop();
@@ -358,18 +372,18 @@ void FinnInterfacerNode::timer_callback()
         stringStream << "/home/mp4d/images_testing/bbox/" << std::to_string(its) << ".png";
         cv::imwrite(stringStream.str(), bbox_img);
 
-        RCLCPP_INFO(this->get_logger(), "Published bbox image");
+        RCLCPP_DEBUG(this->get_logger(), "Published bbox image");
     } else
     {
         RCLCPP_FATAL(this->get_logger(), "Got Finn result, but no image is in queue");
     }
 
-    std::ostringstream stringStream;
-    stringStream << "/home/mp4d/images_testing/bbox/" << std::to_string(its++) << ".txt";
-    std::ofstream bbox_file;
-    bbox_file.open(stringStream.str());
-    bbox_file << std::to_string(result[3]) << "\t" << std::to_string(result[2]) << "\t" << std::to_string(result[1]) << "\t" << std::to_string(result[0]); // xmin ymin xmax ymax in .txt
-    bbox_file.close();
+    // std::ostringstream stringStream;
+    // stringStream << "/home/mp4d/images_testing/bbox/" << std::to_string(its++) << ".txt";
+    // std::ofstream bbox_file;
+    // bbox_file.open(stringStream.str());
+    // bbox_file << std::to_string(result[3]) << "\t" << std::to_string(result[2]) << "\t" << std::to_string(result[1]) << "\t" << std::to_string(result[0]); // xmin ymin xmax ymax in .txt
+    // bbox_file.close();
 
     vision_msgs::msg::BoundingBox2D msg;
 
@@ -381,7 +395,7 @@ void FinnInterfacerNode::timer_callback()
 
     bbox_publisher_->publish(msg);
     
-    RCLCPP_INFO(this->get_logger(), "Published bbox");
+    RCLCPP_DEBUG(this->get_logger(), "Published bbox");
 }
 
 
