@@ -63,6 +63,14 @@ private:
     XStreamtofinn stream_to_finn;
     XFetch_finn fetch_finn;
 
+    std::chrono::time_point<std::chrono::system_clock> start_time;
+    std::chrono::time_point<std::chrono::system_clock> resize_ts;
+    std::chrono::time_point<std::chrono::system_clock> stf_ts;
+    std::chrono::time_point<std::chrono::system_clock> finn_done_ts;
+
+    bool start_time_set = false;
+    bool timing = false;
+
     void initIPs();
 
     void imageRecvCallback(const sensor_msgs::msg::Image::SharedPtr msg);
